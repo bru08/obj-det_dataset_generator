@@ -35,10 +35,10 @@ class OdDataset:
         n_train = int(n * prop_train)
         out_dir = Path(out_dir)
         os.makedirs(out_dir, exist_ok=True)
-        os.makedirs(out_dir/"train"/"images", exist_ok=True)
-        os.makedirs(out_dir/"valid"/"images", exist_ok=True)
-        os.makedirs(out_dir/"train"/"labels", exist_ok=True)
-        os.makedirs(out_dir/"valid"/"labels", exist_ok=True)
+        os.makedirs(out_dir/"images"/"train", exist_ok=True)
+        os.makedirs(out_dir/"images"/"valid", exist_ok=True)
+        os.makedirs(out_dir/"labels"/"train", exist_ok=True)
+        os.makedirs(out_dir/"labels"/"valid", exist_ok=True)
 
         for i in range(n_train):
             coords, img, labels = self.generate_img()
@@ -108,6 +108,7 @@ def plot_box(img, coords, names=None, mod="xyxy"):
                 ax.text(x+3, y-6, str(names[i]), backgroundcolor="green", fontsize=6)
             patch = mpl.patches.Rectangle((x, y), annot[2], annot[3], facecolor="none", linewidth=2, edgecolor="green")
             ax.add_patch(patch)
+
 
 
 
