@@ -37,6 +37,8 @@ class OdDataset:
         os.makedirs(out_dir, exist_ok=True)
         os.makedirs(out_dir/"train"/"images", exist_ok=True)
         os.makedirs(out_dir/"valid"/"images", exist_ok=True)
+        os.makedirs(out_dir/"train"/"labels", exist_ok=True)
+        os.makedirs(out_dir/"valid"/"labels", exist_ok=True)
 
         for i in range(n_train):
             coords, img, labels = self.generate_img()
