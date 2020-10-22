@@ -1,7 +1,7 @@
 # Object detection Dataset Generator
 
 ## Features 
-This code aim at generating simple datasets to test object detection models.
+This repo's goal is to generate simple datasets to test object detection models.
 In particular it allows to:
 * Decide the image size
 * Decide how many object to include in each image
