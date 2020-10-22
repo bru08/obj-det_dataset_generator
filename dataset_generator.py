@@ -69,6 +69,8 @@ class OdDataset:
             for i, coord in enumerate(coords):
 
                 if self.export_format == "yolo":
+                    coord[2] = coord[2] - coord[0]
+                    coord[3] = coord[3] - coord[1]
                     coord = (x / self.img_size for x in coord)
 
                 f.write(f"{labels[i]},")
@@ -76,33 +78,31 @@ class OdDataset:
                 f.write("\n")
 
 
-def plot_targets(name):
+def plot_targets(name, coord_norm=False, modec="xyxy"):
     img = io.imread(name)
     with open(re.sub(".png", ".txt", name), "r") as f:
-        annots = [ [int(y) for y in x.split(",")] for x in f.readlines()]
-    fig, ax = plt.subplots(figsize=(6,6))
-    ax.imshow(img)
-    for annot in annots:
-        plt.text(annot[1]+3, annot[2]-6, str(annot[0]), backgroundcolor="green", fontsize=12)
-        w, h = (-annot[1] + annot[3]), (-annot[2] + annot[4])
-        patch = mpl.patches.Rectangle((annot[1], annot[2]), w, h, facecolor="none", linewidth=2, edgecolor="green")
-        ax.add_patch(patch)
+        annots = np.array([ [float(y) for y in x.split(",")] for x in f.readlines()] )
+    plot_box(img, annots[:, 1:], annots[:, 0], modec=modec, coord_norm=coord_norm)
     plt.show()
 
-def plot_box(img, coords, names=None, mod="xyxy"):
+def plot_box(img, coords, names=None, modec="xyxy", coord_norm=False):
     fig, ax = plt.subplots()
     ax.imshow(img)
-    if mod == "xyxy":
+    if coord_norm:
+        coords = [x*img.shape[0] for x in coords]
+    if modec == "xyxy":
         for i, annot in enumerate(coords):
-            if names:
+            if names.shape[0]:
                 ax.text(annot[0]+3, annot[1]-6, str(names[i]), backgroundcolor="green", fontsize=6)
             w, h = (-annot[0] + annot[2]), (-annot[1] + annot[3])
             patch = mpl.patches.Rectangle((annot[0], annot[1]), w, h, facecolor="none", linewidth=2, edgecolor="green")
             ax.add_patch(patch)
-    elif mod == "xywh":
+    elif modec == "xywh":
         for i, annot in enumerate(coords):
-            x, y = round(annot[0] - annot[2]/2), round(annot[1] - annot[3]/2)
-            if names:
+            print(annot)
+            #x, y = round(annot[0] - annot[2]/2), round(annot[1] - annot[3]/2)
+            x, y = annot[0], annot[1]
+            if names.shape[0]:
                 ax.text(x+3, y-6, str(names[i]), backgroundcolor="green", fontsize=6)
             patch = mpl.patches.Rectangle((x, y), annot[2], annot[3], facecolor="none", linewidth=2, edgecolor="green")
             ax.add_patch(patch)
@@ -130,6 +130,11 @@ if __name__ == "__main__":
 
     generator = OdDataset(im_size, obj_size, max_obj_per_img, export_format=annot_format)
     generator.generate_dataset(n=ds_size)
-    #plot_targets("./dataset/train/img_70.png")
+
+# %%
+
+    plot_targets("./dataset/train/img_3.png", coord_norm=True, modec="xywh")
 
 
+
+# %%
