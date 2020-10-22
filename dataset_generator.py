@@ -35,8 +35,8 @@ class OdDataset:
         n_train = int(n * prop_train)
         out_dir = Path(out_dir)
         os.makedirs(out_dir, exist_ok=True)
-        os.makedirs(out_dir/"train", exist_ok=True)
-        os.makedirs(out_dir/"valid", exist_ok=True)
+        os.makedirs(out_dir/"train"/"images", exist_ok=True)
+        os.makedirs(out_dir/"valid"/"images", exist_ok=True)
 
         for i in range(n_train):
             coords, img, labels = self.generate_img()
