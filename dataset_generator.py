@@ -1,5 +1,6 @@
 # %%
 import os
+import argparse
 import re
 import pandas as pd
 from pathlib import Path
@@ -111,9 +112,23 @@ def plot_box(img, coords, names=None, mod="xyxy"):
 
 # %%
 if __name__ == "__main__":
-    generator = OdDataset(256, 56, 6, export_format="yolo")
-    generator.generate_dataset(n=100)
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--image-size', type=int, default=256)
+    parser.add_argument('-o', '--object-size', type=int, default=256//5)
+    parser.add_argument('-m', '--max-objects', type=int, default=4)
+    parser.add_argument("-n", "--dataset-size", type=int, default=100)
+    parser.add_argument("-f", "--annotations-format", type=str, default="")
+    args = parser.parse_args()
+
+    im_size = args.image_size
+    obj_size = args.object_size
+    max_obj_per_img = args.max_objects
+    ds_size = args.dataset_size
+    annot_format = args.annotations_format
+
+    generator = OdDataset(im_size, obj_size, max_obj_per_img, export_format=annot_format)
+    generator.generate_dataset(n=ds_size)
     #plot_targets("./dataset/train/img_70.png")
 
 
-# %%

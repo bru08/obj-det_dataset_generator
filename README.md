@@ -26,3 +26,12 @@ In particular it allows to:
 and with the their ground truth
 
 ![sample3](assets/gg_3obj.png)
+
+## Command line interface
+
+Command line parameters  
+* -s  image size (int) (squared image)
+* -o  object size (int) max size of enlcosing square for objects inserted in the image
+* -m  maximum numbe of objects in each iamge
+* -n  total number of images to be generated (it will be split in train and validation 80/20)
+* -f  annotation format, if yolo the the coordinates will be normalized with iamge size value
