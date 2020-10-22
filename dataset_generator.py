@@ -64,8 +64,8 @@ class OdDataset:
         return np.array(coords), img, labels
     
     def save_img_coord(self, dest, name, coords, img, labels):
-        io.imsave(dest / "images" / f"{name}.png", (img*255).astype(np.uint8))
-        with open(dest / "labels" / f"{name}.txt", "w+") as f:
+        io.imsave(dest / f"{name}.png", (img*255).astype(np.uint8))
+        with open(dest / f"{name}.txt", "w+") as f:
             for i, coord in enumerate(coords):
 
                 if self.export_format == "yolo":
