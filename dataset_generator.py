@@ -48,12 +48,27 @@ class OdDataset:
 
     def generate_img(self):
         img = np.zeros((self.img_size, self.img_size))
+        max_obj = (self.img_size // self.obj_size) ** 2
         n_trgt = np.random.randint(1, self.max_obj) if self.max_obj > 1 else self.max_obj
+        n_trgt = min(max_obj, n_trgt)
+
         trgt_id = np.random.choice(len(self.data), size=n_trgt, replace=False)
         coords = []
         labels = []
+
+        idxs = np.arange(self.img_size - self.obj_size)
+        idys = np.arange(self.img_size - self.obj_size)
+
         for idx in trgt_id:
-            xr, yr = np.random.randint(0,self.img_size-self.obj_size, 2)
+            try:
+                xr = np.random.choice(idxs)
+                yr = np.random.choice(idys)
+            except:
+                break
+            idxs = np.setdiff1d(idxs, np.arange(xr - self.obj_size, xr + self.obj_size), assume_unique=True)
+            idys = np.setdiff1d(idys, np.arange(yr - self.obj_size, yr + self.obj_size), assume_unique=True)
+
+
             cls_id = self.labels[idx].item()
             coord = [xr, yr, xr + self.obj_size, yr + self.obj_size]
             coords.append(coord)
